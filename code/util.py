@@ -3,6 +3,8 @@ from collections import deque, namedtuple
 from math import *
 from random import randint, shuffle
 
+import numpy as np
+
 import json
 import time
 
