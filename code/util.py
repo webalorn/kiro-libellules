@@ -107,11 +107,12 @@ def output_sol_force_overwrite(name, data, as_path=False):
     with open(str(p), 'w') as f:
         json.dump(data, f)
 
-def output_sol_if_better(name, data):
+def output_sol_if_better(name, data, sol_val=None):
     """ Returns True if the solution is better than the last found solution in this program run,
         even solution already written in the JSON file is even better.
         Updates BEST_SOLS_DATA and BEST_SOLS """
-    sol_val = eval_sol(IN_DATA[name], data)
+    if sol_val is None:
+        sol_val = eval_sol(IN_DATA[name], data)
     if name in BEST_SOLS and is_better_sol(sol_val, BEST_SOLS[name]):
         return False
     BEST_SOLS[name] = sol_val

@@ -100,7 +100,7 @@ def reasign_clients_random(in_data, sol):
     sol['clients'] = clients
     return sol, total_cost
 
-def reasign_best(in_data, sol, max_random=30):
+def reasign_best(in_data, sol, max_random=10):
     sol_min, cost_min = reasign_clients_from_low(in_data, sol)
     for _ in range(max_random):
         sol, cost = reasign_clients_random(in_data, sol)
