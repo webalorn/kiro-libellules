@@ -1,5 +1,6 @@
 from util import *
 from solution_tiny import *
+from reassign import *
 import time
 
 # TODO : should import functions from modules
@@ -18,9 +19,12 @@ def main():
     inputs_names = INPUT_NAMES
     read_all_inputs()
 
-    #print(IN_DATA['KIRO-tiny.json'])
-    #print(generate_empty_solution(IN_DATA['KIRO-tiny.json']))
-    print(all_possible_soluce(IN_DATA['KIRO-tiny.json']))
+    in_data = IN_DATA['KIRO-medium.json']
+    for sol in all_possible_soluce(in_data):
+        sol = reasign_best(in_data, sol)
+        output_sol_if_better(in_data['name'], sol)
+    exit(0)
+    
 
     for name in inputs_names:
         print(f"========== GENERATE {name} ==========")

@@ -66,8 +66,8 @@ def all_possible_soluce(in_data):
             out = generate_empty_solution(in_data)
             out['sites'] = l1[i]
             out['parent'] = x
-            out['prods'] = p
-            out['distribs'] = d
+            # out['prods'] = p
+            # out['distribs'] = d
             all_soluce.append(out)
     return all_soluce
 

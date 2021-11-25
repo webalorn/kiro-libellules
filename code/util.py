@@ -14,7 +14,7 @@ BEST_SOLS_DATA = {}
 IN_DATA = {}
 INPUT_NAMES = [e.name for e in Path('../inputs').iterdir() if e.name.endswith('.json')]
 
-OUT_SUFFIX = '-brutal-1' # TODO : to have different solutions names
+OUT_SUFFIX = '-out-1' # TODO : to have different solutions names
 
 # ========== Constants ==========
 
@@ -46,8 +46,6 @@ def generate_empty_solution(in_data): #Initialise une solution vide
     out = {}
     out['sites'] = [0 for _ in range(nb_sites)]
     out['parent'] = [-1 for _ in range(nb_sites)]
-    out['prods'] = set()
-    out['distribs'] = set()
     out['clients'] = [-1 for _ in range(nb_clients)]
     return out
 
@@ -92,14 +90,18 @@ def read_all_inputs():
 def _out_with_suffix(name):
     return name[:-5] + OUT_SUFFIX + name[-5:]
 
-def read_sol(name):
+def read_sol(name, as_path=False):
     p = Path('../sols') / _out_with_suffix(name)
+    if as_path:
+        p = Path(name)
     with open(str(p), 'r') as f:
         data = json.load(f)
     return data
 
-def output_sol_force_overwrite(name, data):
+def output_sol_force_overwrite(name, data, as_path=False):
     p = Path('../sols') / _out_with_suffix(name)
+    if as_path:
+        p = Path(name)
     with open(str(p), 'w') as f:
         json.dump(data, f)
 
@@ -129,6 +131,12 @@ def output_sol_if_better(name, data):
 # ========== Evaluation ==========
 
 def eval_sol(in_data, out_data):
+    val = eval_sol_sub(in_data, out_data)
+    if val is None:
+        raise Exception("Invalid solution !!!")
+    return val
+
+def eval_sol_sub(in_data, out_data):
     ret = 0
     # Building cost
     for t in out_data["sites"]:

@@ -12,7 +12,7 @@ def get_clients_dists(in_data, sol):
     dist_client2site = []
     siteSiteDistances = in_data['siteSiteDistances']
     siteClientDistances = in_data['siteClientDistances']
-    parent = in_data['parent']
+    parent = sol['parent']
     out_sites = sol['sites']
 
     for i_client, c in enumerate(in_data['clients']):
@@ -100,11 +100,11 @@ def reasign_clients_random(in_data, sol):
     sol['clients'] = clients
     return sol, total_cost
 
-def reasign_best(in_data, sol, max_random=10):
+def reasign_best(in_data, sol, max_random=30):
     sol_min, cost_min = reasign_clients_from_low(in_data, sol)
     for _ in range(max_random):
         sol, cost = reasign_clients_random(in_data, sol)
         if cost < cost_min:
-            print("Better sol random")
+            # print("Better sol random")
             sol_min, cost_min = sol, cost
     return sol_min
