@@ -91,17 +91,19 @@ def _out_with_suffix(name):
     return name[:-5] + OUT_SUFFIX + name[-5:]
 
 def read_sol(name, as_path=False):
-    p = Path('../sols') / _out_with_suffix(name)
     if as_path:
         p = Path(name)
+    else:
+        p = Path('../sols') / _out_with_suffix(name)
     with open(str(p), 'r') as f:
         data = json.load(f)
     return data
 
 def output_sol_force_overwrite(name, data, as_path=False):
-    p = Path('../sols') / _out_with_suffix(name)
     if as_path:
         p = Path(name)
+    else:
+        p = Path('../sols') / _out_with_suffix(name)
     with open(str(p), 'w') as f:
         json.dump(data, f)
 
