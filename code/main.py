@@ -16,6 +16,8 @@ def main():
     inputs_names = INPUT_NAMES
     read_all_inputs()
 
+    print(IN_DATA['KIRO-tiny.json'])
+
     for name in inputs_names:
         print(f"========== GENERATE {name} ==========")
         in_data = IN_DATA[name]

@@ -32,10 +32,6 @@ cost_capacity_exceed = 1000.0
 capacity_base = 750000
 capacity_auto_bonus = 225000
 
-t_vide = 0
-t_prod = 1
-t_auto = 2
-t_distrib = 3
 
 # ========== Input / Output ==========
 
@@ -74,33 +70,10 @@ def read_sol(name):
     p = Path('../sols') / _out_with_suffix(name)
     with open(str(p), 'r') as f:
         data = json.load(f)
-    data['prods'] = set([s for s, typ in enumerate(data['sites']) if typ == t_auto or type == t_prod])
-    data['distribs'] = set([s for s, typ in enumerate(data['sites']) if typ == t_prod])
     return data
-
-def outout_final_sol(name, data):
-    p = Path('../sols') / ('final-' + _out_with_suffix(name))
-    f_data = {
-        "productionCenters" : [
-            {"id" : s+1, "automaton" : 1 if typ == t_auto else 0 }
-            for s, typ in enumerate(data['sites']) if typ == t_auto or type == t_prod
-        ],
-        "distributionCenters" : [
-            {"id" : s+1, "parent" : data['parent'][s]+1 }
-            for s, typ in enumerate(data['sites']) if typ == t_prod
-        ],
-        "clients" : [{"id" : i+1, "parent" : p+1} for i, p in enumerate(data["clients"])]
-    }
-    
-
-    with open(str(p), 'w') as f:
-        json.dump(f_data, f)
 
 def output_sol_force_overwrite(name, data):
     p = Path('../sols') / _out_with_suffix(name)
-    data = {key : value for key, value in data.values()}
-    del data['prods']
-    del data['distribs']
     with open(str(p), 'w') as f:
         json.dump(data, f)
 
@@ -133,7 +106,7 @@ def total_cost(data):
     ret = 0
     # Building cost
     for s in data["productionCenters"]:
-        
+        pass
 
 def eval_sol(data):
     return 0
