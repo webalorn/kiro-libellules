@@ -15,6 +15,28 @@ INPUT_NAMES = [e.name for e in Path('../inputs').iterdir() if e.name.endswith('.
 
 OUT_SUFFIX = '-out-1' # TODO : to have different solutions names
 
+# ========== Constants ==========
+
+cost_build_prod = 800000.0
+cost_automation = 1200000.0
+cost_build_distrib = 60000.0
+
+cost_prod_prod = 18.0
+cost_prod_auto_bonus = 3.4
+cost_prod_distrib = 2.0
+
+cost_route_primary = 0.015
+cost_route_secondary = 3.63
+
+cost_capacity_exceed = 1000.0
+capacity_base = 750000
+capacity_auto_bonus = 225000
+
+t_vide = 0
+t_prod = 1
+t_auto = 2
+t_distrib = 3
+
 # ========== Input / Output ==========
 
 def preprocess_input(data):
@@ -93,11 +115,17 @@ def output_sol_if_better(name, data):
 
 # ========== Evaluation ==========
 
+def total_cost(data):
+    ret = 0
+    # Building cost
+    for s in data["productionCenters"]:
+        
+
 def eval_sol(data):
     return 0
 
 def is_better_sol(old_sol_value, new_sol_value):
-    return new_sol_value > old_sol_value # TODO : Replace by < if the best value is the lower one
+    return new_sol_value < old_sol_value # TODO : Replace by < if the best value is the lower one
             
 
 # ========== Utilities ==========
