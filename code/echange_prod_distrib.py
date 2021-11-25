@@ -20,9 +20,12 @@ def echange_try(in_data,sol):
     parent = sol['parent']
     sites = sol['sites']
 
+    print(len(parent),len(sites))
+
     n = random.randint(0,len(parent))
     while sites[n] != 1 or sites[n] != 2:
         n = random.randint(0,len(parent))
+        print(n)
     
     fils = recup_fils(parent,n)
     indice_f = random.randint(0,len(fils))
