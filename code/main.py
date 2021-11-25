@@ -1,5 +1,10 @@
 from util import *
 from solution_tiny import *
+<<<<<<< HEAD
+from affichage_sites import *
+=======
+from reassign import *
+>>>>>>> cc2281f4bddca404f89c37157e15d63f35432fb2
 import time
 
 # TODO : should import functions from modules
@@ -21,6 +26,14 @@ def main():
     #print(IN_DATA['KIRO-tiny.json'])
     #print(generate_empty_solution(IN_DATA['KIRO-tiny.json']))
     #print(all_possible_soluce(IN_DATA['KIRO-tiny.json']))
+    affichage(IN_DATA['KIRO-large.json'])
+    # in_data = IN_DATA['KIRO-tiny.json']
+    # for sol in all_possible_soluce(in_data):
+    #     print(1 in sol['sites'] or 2 in sol['sites'])
+    #     sol = reasign_best(in_data, sol)
+    #     output_sol_if_better(in_data['name'], sol)
+    # exit(0)
+    
 
     for name in inputs_names:
         print(f"========== GENERATE {name} ==========")
