@@ -32,6 +32,10 @@ cost_capacity_exceed = 1000.0
 capacity_base = 750000
 capacity_auto_bonus = 225000
 
+t_vide = 0
+t_prod = 1
+t_auto = 2
+t_distrib = 3
 
 # ========== Input / Output ==========
 
@@ -92,7 +96,7 @@ def total_cost(data):
     ret = 0
     # Building cost
     for s in data["productionCenters"]:
-        pass
+        
 
 def eval_sol(data):
     return 0
