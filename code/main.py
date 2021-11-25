@@ -1,10 +1,7 @@
 from util import *
 from solution_tiny import *
-<<<<<<< HEAD
 from affichage_sites import *
-=======
 from reassign import *
->>>>>>> cc2281f4bddca404f89c37157e15d63f35432fb2
 import time
 
 # TODO : should import functions from modules
