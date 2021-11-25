@@ -21,7 +21,8 @@ def tres_stupide(in_data):
 def generate_base_solution(in_data):
     # return {'empty' : True} # TODO : use functions from modules
     print("--- start stupid2")
-    data = stupid2(in_data)
+    # data = stupid2(in_data)
+    data = read_sol(in_data['name'])
     print("--- end stupid2")
     return data
     # return tres_stupide(in_data)
@@ -38,7 +39,8 @@ def improve_sol_2(in_data, sol):
 
 def main():
     t1 = time.time()
-    inputs_names = ['KIRO-large.json'] # If we want to tune only some solutions
+    inputs_names = ['KIRO-large.json']
+    # inputs_names = ['KIRO-medium.json']
     # inputs_names = INPUT_NAMES
     read_all_inputs()
 
@@ -46,7 +48,7 @@ def main():
     #print(generate_empty_solution(IN_DATA['KIRO-tiny.json']))
     #print(all_possible_soluce(IN_DATA['KIRO-tiny.json']))
     # affichage(IN_DATA['KIRO-large.json'])
-    # in_data = IN_DATA['KIRO-tiny.json']
+    # in_data = IN_DATA['KIRO-small.json']
     # for sol in all_possible_soluce(in_data):
     #     print(1 in sol['sites'] or 2 in sol['sites'])
     #     sol = reasign_best(in_data, sol)
@@ -57,8 +59,13 @@ def main():
     for name in inputs_names:
         print(f"========== GENERATE {name} ==========")
         in_data = IN_DATA[name]
-        for _ in range(1): # TODO : number of iterations
+        for _ in range(15): # TODO : number of iterations
             sol_data = generate_base_solution(in_data)
+            print(eval_sol(in_data, sol_data))
+            output_sol_if_better(name, sol_data)
+
+            sol_data = reasign_best(in_data, sol_data, 50)
+            print("-> reasign_best", eval_sol(in_data, sol_data))
             output_sol_if_better(name, sol_data)
         
     

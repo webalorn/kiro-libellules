@@ -22,7 +22,7 @@ def get_clients_dists(in_data, sol):
             if typ != t_vide:
                 s_prod = s
                 cost += c[0] * cost_route_secondary * siteClientDistances[s][i_client]
-                if typ != t_distrib:
+                if typ == t_distrib:
                     s_prod = parent[s]
                     cost += c[0] * cost_route_primary * siteSiteDistances[s][s_prod]
                 if out_sites[s_prod] == t_prod:
@@ -37,7 +37,8 @@ def get_clients_dists(in_data, sol):
 def assign_linear(clients, dist_client2site, capacities, demands, parent, out_sites, clients_order=None):
     total_cost = 0
     if clients_order is None:
-        clients_order = range(len(clients))
+        clients_order = list(range(len(clients)))
+        shuffle(clients_order)
     for i_client in clients_order:
         if clients[i_client] == -1:
             all_costs = []
@@ -102,8 +103,11 @@ def reasign_clients_random(in_data, sol):
 
 def reasign_best(in_data, sol, max_random=10):
     sol_min, cost_min = reasign_clients_from_low(in_data, sol)
+    cost_min = eval_sol(in_data, sol_min)
+
     for _ in range(max_random):
         sol, cost = reasign_clients_random(in_data, sol)
+        cost = eval_sol(in_data, sol)
         if cost < cost_min:
             # print("Better sol random")
             sol_min, cost_min = sol, cost
