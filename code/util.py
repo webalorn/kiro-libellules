@@ -32,6 +32,10 @@ cost_capacity_exceed = 1000.0
 capacity_base = 750000
 capacity_auto_bonus = 225000
 
+t_vide = 0
+t_prod = 1
+t_auto = 2
+t_distrib = 3
 
 # ========== Input / Output ==========
 
@@ -105,14 +109,49 @@ def output_sol_if_better(name, data):
 
 # ========== Evaluation ==========
 
-def total_cost(data):
+def eval_sol(in_data, out_data):
     ret = 0
     # Building cost
-    for s in data["productionCenters"]:
-        pass
+    for t in out_data["sites"]:
+        if t == t_prod:
+            ret += cost_build_prod
+        elif t == t_auto:
+            ret += cost_build_prod + cost_automation
+        elif t == t_distrib:
+            ret += cost_build_distrib
 
-def eval_sol(data):
-    return 0
+    # Capacity cost
+    capacities = [capacity_base+capacity_auto_bonus if t == t_auto else capacity_base for t in out_data["sites"]]
+    for k, center in enumerate(out_data["clients"]):
+        demand = out_data["clients"][k][0]
+        source = center
+
+        if data["sites"][center] == t_distrib:
+            source = parent[center]
+
+            # Production cost
+            ret += cost_prod_distrib * demand # relay
+
+            # Routing cost
+            ret += cost_route_primary * in_data["siteSiteDistances"][source][center]
+            ret += cost_route_secondary * in_data["siteClientDistances"][center][k]
+        else:
+            # Routing cost
+            ret += cost_route_secondary * in_data["siteClientDistances"][source][k]
+
+        capacities[source] -= demand # capacity cost ?
+
+        # Production cost
+        ret += cost_prod_prod * demand
+        if data["sites"][source] == t_auto:
+            ret -= cost_prod_auto_bonus * demand
+
+    # Capacity cost
+    for c in capacities:
+        if c<0:
+            ret += -c * cost_capacity_exceed
+
+    return ret
 
 def is_better_sol(old_sol_value, new_sol_value):
     return new_sol_value < old_sol_value # TODO : Replace by < if the best value is the lower one
