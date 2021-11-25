@@ -11,6 +11,9 @@ t_distrib = 3
 
 max_cap = 2500000
 
+def nearest(in_data, iC):
+    nbSites = len(in_data["sites"])
+
 
 def clients_setup(in_data):
     nbSites = len(in_data["sites"])
@@ -31,7 +34,6 @@ def clients_setup(in_data):
         for iS in range(nbSites):
             if in_data["siteClientDistances"][iS][iC] < best and sites_capacity[iS] >= demand[iC]:
                 iBest = iS
-                best = in_data["siteClientDistances"][iS][iC]
 
         out_clients[iC] = iBest
         sites_capacity[out_clients[iC]] -= demand[iC]
