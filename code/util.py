@@ -173,6 +173,7 @@ def eval_sol_sub(in_data, out_data):
         if out_data["sites"][center] == t_distrib:
             source = out_data["parent"][center]
             if out_data["sites"][source] not in [t_prod,t_auto]: # check prod
+                raise Exception('out_data["sites"][source] not in [t_prod,t_auto]')
                 return None
 
             # Production cost
@@ -185,6 +186,7 @@ def eval_sol_sub(in_data, out_data):
             # Routing cost
             ret += demand * cost_route_secondary * in_data["siteClientDistances"][source][k]
         else:
+            raise Exception('bad t_type')
             return None
 
 

@@ -12,7 +12,20 @@ def get_best_sol(in_data, sol, val_sol=None, new_sol=None):
         output_sol_if_better(in_data['name'], sol, sol_val=val_sol)
     return sol, val_sol
 
-def try_assign_distrib(in_data, sol, to_assign)
+def try_assign_distrib(in_data, sol, to_assign):
+    sol['clients'] = reasign_best(in_data, sol)['clients']
+    val_sol = None
+    shuffle(to_assign)
+    sites = sol['sites']
+    for s in to_assign:
+        for s_parent in range(len(sites)):
+            if sites[s_parent] != t_auto and sites[s_parent] != t_prod:
+                continue
+            new_sol = deepcopy(sol)
+            new_sol['sites'][s] = t_distrib
+            new_sol['parent'][s] = s_parent
+            sol, val_sol = get_best_sol(in_data, sol, val_sol=val_sol, new_sol=new_sol)
+        
 
 def try_change_typ(in_data, sol, s, s_new_typ):
     typ = sol['sites'][s]
@@ -24,19 +37,27 @@ def try_change_typ(in_data, sol, s, s_new_typ):
         return False
     
     if s_new_typ == t_vide:
-        if s_new_typ == t_prod or s_new_typ == t_auto:
+        if typ == t_prod or typ == t_auto:
+            to_reassign = []
+            for s2 in range(len(sites)):
+                if sites[s2] == t_distrib and parent[s2] == s:
+                    to_reassign.append(s2)
+                    sites[s2] = t_vide
+                    parent[s2] = -1
+                
+            try_assign_distrib(in_data, sol, to_reassign)
+    elif s_new_typ == t_distrib:
+        to_reassign = [s]
+        sites[s] = t_vide
+
+        if typ == t_prod or typ == t_auto:
             for s2 in range(len(sites)):
                 to_reassign = []
                 if sites[s2] == t_distrib and parent[s2] == s:
                     to_reassign.append(s2)
                     sites[s2] = t_vide
-                
-                try_assign_distrib(in_data, sol, to_reassign)
-    elif s_new_typ == t_distrib:
-        return False
-        try_assign_distrib(in_data, sol, [s])
-        if s_new_typ != t_vide:
-            return False
+
+        try_assign_distrib(in_data, sol, to_reassign)
 
 def try_improve_sol(in_data, sol):
     siteSiteDistances = in_data['siteSiteDistances']
