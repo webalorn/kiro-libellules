@@ -88,10 +88,10 @@ def merge(in_data, clients, sites, parents):
                 if sites[a] not in [t_prod, t_auto] or sites[b] not in [t_prod, t_auto]: continue
                 if sites_demand[a]+sites_demand[b] > max_cap: continue
                 
-                var_clients = [a if k==b else k for k in clients]
+                var_clients = clients.copy() #[a if k==b else k for k in clients]
                 var_sites = sites.copy()
                 var_sites[b] = t_distrib
-                var_parents = parents.copy()
+                var_parents = [a if k==b else k for k in parents]
                 var_parents[b] = a
                 var_sites_demand = sites_demand.copy()
                 var_sites_demand[a] += var_sites_demand[b]
@@ -103,7 +103,6 @@ def merge(in_data, clients, sites, parents):
                 val = util.eval_sol(in_data, gen_sol(var_clients, var_sites, var_parents))
 
                 if val < best:
-                    print('#', end="")
                     aBest = a
                     bBest = b
                     best = val
@@ -112,18 +111,12 @@ def merge(in_data, clients, sites, parents):
                     best_sites = var_sites
                     best_parents = var_parents
                     best_sites_demand = var_sites_demand
-                else:
-                    print('.', end="")
 
         if aBest!=bBest:
             clients = best_clients
             sites = best_sites
             parents = best_parents
             sites_demand = best_sites_demand
-            
-            print("ah!")
-
-        print("")
 
     return gen_sol(clients, sites, parents)
 
@@ -159,7 +152,7 @@ def merge2(in_data, clients, sites, parents):
                 if sites[a] not in [t_prod, t_auto] or sites[b] not in [t_prod, t_auto]: continue
                 if sites_demand[a]+sites_demand[b] > max_cap: continue
                 
-                var_clients = [a if k==b else k for k in clients]
+                var_clients = clients
                 var_sites = sites.copy()
                 var_sites[b] = t_distrib
                 var_parents = parents.copy()
@@ -174,7 +167,6 @@ def merge2(in_data, clients, sites, parents):
                 val = util.eval_sol(in_data, gen_sol(var_clients, var_sites, var_parents))*(1+0.01*(0.5-random.random()))
 
                 if val < best:
-                    print('#', end="")
                     aBest = a
                     bBest = b
                     best = val
@@ -183,18 +175,12 @@ def merge2(in_data, clients, sites, parents):
                     best_sites = var_sites
                     best_parents = var_parents
                     best_sites_demand = var_sites_demand
-                else:
-                    print('.', end="")
 
         if aBest!=bBest:
             clients = best_clients
             sites = best_sites
             parents = best_parents
             sites_demand = best_sites_demand
-            
-            print("ah!")
-
-        print("")
 
     return gen_sol(clients, sites, parents)
 
