@@ -107,11 +107,12 @@ def output_sol_force_overwrite(name, data, as_path=False):
     with open(str(p), 'w') as f:
         json.dump(data, f)
 
-def output_sol_if_better(name, data):
+def output_sol_if_better(name, data, sol_val=None):
     """ Returns True if the solution is better than the last found solution in this program run,
         even solution already written in the JSON file is even better.
         Updates BEST_SOLS_DATA and BEST_SOLS """
-    sol_val = eval_sol(IN_DATA[name], data)
+    if sol_val is None:
+        sol_val = eval_sol(IN_DATA[name], data)
     if name in BEST_SOLS and is_better_sol(sol_val, BEST_SOLS[name]):
         return False
     BEST_SOLS[name] = sol_val
@@ -172,6 +173,7 @@ def eval_sol_sub(in_data, out_data):
         if out_data["sites"][center] == t_distrib:
             source = out_data["parent"][center]
             if out_data["sites"][source] not in [t_prod,t_auto]: # check prod
+                raise Exception('out_data["sites"][source] not in [t_prod,t_auto]')
                 return None
 
             # Production cost
@@ -184,6 +186,7 @@ def eval_sol_sub(in_data, out_data):
             # Routing cost
             ret += demand * cost_route_secondary * in_data["siteClientDistances"][source][k]
         else:
+            raise Exception('bad t_type')
             return None
 
 
