@@ -1,7 +1,8 @@
 from pathlib import Path
 from collections import deque, namedtuple
 from math import *
-from random import randint, shuffle
+from random import randint, shuffle, choice
+from copy import copy, deepcopy
 
 import numpy as np
 
@@ -13,7 +14,7 @@ BEST_SOLS_DATA = {}
 IN_DATA = {}
 INPUT_NAMES = [e.name for e in Path('../inputs').iterdir() if e.name.endswith('.json')]
 
-OUT_SUFFIX = '-out-1' # TODO : to have different solutions names
+OUT_SUFFIX = '-brutal-1' # TODO : to have different solutions names
 
 # ========== Constants ==========
 
@@ -29,13 +30,30 @@ cost_route_primary = 0.0075
 cost_route_secondary = 0.11
 
 cost_capacity_exceed = 1000.0
-capacity_base = 750000
-capacity_auto_bonus = 225000
+capacity_base = 1250000
+capacity_auto_bonus = 1250000
 
 t_vide = 0
 t_prod = 1
 t_auto = 2
 t_distrib = 3
+
+# ========== Compute vals on sols ==========
+
+def generate_empty_solution(in_data): #Initialise une solution vide
+    nb_sites = len(in_data['sites'])
+    nb_clients = len(in_data['clients'])
+    out = {}
+    out['sites'] = [0 for _ in range(nb_sites)]
+    out['parent'] = [-1 for _ in range(nb_sites)]
+    out['prods'] = set()
+    out['distribs'] = set()
+    out['clients'] = [-1 for _ in range(nb_clients)]
+    return out
+
+def get_capacities(sol):
+    return [capacity_base+capacity_auto_bonus if s == t_auto else
+    (capacity_base) if s == t_prod else 0 for s in sol['sites']]
 
 # ========== Input / Output ==========
 
@@ -88,7 +106,7 @@ def output_sol_if_better(name, data):
     """ Returns True if the solution is better than the last found solution in this program run,
         even solution already written in the JSON file is even better.
         Updates BEST_SOLS_DATA and BEST_SOLS """
-    sol_val = eval_sol(data)
+    sol_val = eval_sol(IN_DATA['name'], data)
     if name in BEST_SOLS and is_better_sol(sol_val, BEST_SOLS[name]):
         return False
     BEST_SOLS[name] = sol_val
@@ -100,7 +118,7 @@ def output_sol_if_better(name, data):
     except:
         pass
     if cur_file_sol is not None:
-        old_val = eval_sol(cur_file_sol)
+        old_val = eval_sol(IN_DATA['name'], cur_file_sol)
         if not is_better_sol(old_val, sol_val):
             return True
     print(f"----> Found solution for {name} of value {sol_val}")

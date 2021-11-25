@@ -2,17 +2,6 @@ from util import *
 import time
 # TODO : should import functions from modules
 
-def generate_empty_solution(in_data): #Initialise une solution vide
-    nb_sites = len(in_data['sites'])
-    nb_clients = len(in_data['clients'])
-    out = {}
-    out['sites'] = [0 for _ in range(nb_sites)]
-    out['parent'] = [-1 for _ in range(nb_sites)]
-    out['prods'] = set()
-    out['distribs'] = set()
-    out['clients'] = [-1 for _ in range(nb_clients)]
-    return out
-
 def generate_base_solution(in_data):
     return {'empty' : True} # TODO : use functions from modules
 
