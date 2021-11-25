@@ -1,7 +1,7 @@
 from pathlib import Path
 from collections import deque, namedtuple
 from math import *
-from random import randint, shuffle
+from random import randint, shuffle, choice
 from copy import copy, deepcopy
 
 import numpy as np
@@ -30,8 +30,8 @@ cost_route_primary = 0.0075
 cost_route_secondary = 0.11
 
 cost_capacity_exceed = 1000.0
-capacity_base = 750000
-capacity_auto_bonus = 225000
+capacity_base = 1250000
+capacity_auto_bonus = 1250000
 
 t_vide = 0
 t_prod = 1
