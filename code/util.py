@@ -25,8 +25,8 @@ cost_prod_prod = 18.0
 cost_prod_auto_bonus = 3.4
 cost_prod_distrib = 2.0
 
-cost_route_primary = 0.015
-cost_route_secondary = 3.63
+cost_route_primary = 0.0075
+cost_route_secondary = 0.11
 
 cost_capacity_exceed = 1000.0
 capacity_base = 750000
