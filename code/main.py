@@ -5,6 +5,7 @@ from reassign import *
 import time
 from stupid import stupid, stupid2
 from pertubations import *
+from sous_probleme import *
 
 def tres_stupide(in_data):
     sol = generate_empty_solution(in_data)
@@ -27,8 +28,12 @@ def generate_base_solution(in_data):
 
 def improve_sol(in_data, sol):
     # return data # TODO : use functions from modules
-    return try_improve_sol(in_data, sol)
+    # return try_improve_sol(in_data, sol)
+    return improve_sol_2(in_data,sol)
 
+def improve_sol_2(in_data, sol):
+    sol = sous_probleme(in_data, 35, 45, -10, 0, sol)
+    return sol
 # ========== Main loop ==========
 
 def main():
