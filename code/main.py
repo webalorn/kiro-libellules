@@ -2,6 +2,17 @@ from util import *
 import time
 # TODO : should import functions from modules
 
+def generate_empty_solution(in_data): #Initialise une solution vide
+    nb_sites = len(in_data['sites'])
+    nb_clients = len(in_data['clients'])
+    out = {}
+    out['sites'] = [0 for _ in range(nb_sites)]
+    out['parent'] = [-1 for _ in range(nb_sites)]
+    out['prods'] = set()
+    out['distribs'] = set()
+    out['clients'] = [-1 for _ in range(nb_clients)]
+    return out
+
 def generate_base_solution(in_data):
     return {'empty' : True} # TODO : use functions from modules
 
@@ -16,7 +27,8 @@ def main():
     inputs_names = INPUT_NAMES
     read_all_inputs()
 
-    # print(IN_DATA['KIRO-tiny.json'])
+    #print(IN_DATA['KIRO-tiny.json'])
+    #print(generate_empty_solution(IN_DATA['KIRO-tiny.json']))
 
     for name in inputs_names:
         print(f"========== GENERATE {name} ==========")
