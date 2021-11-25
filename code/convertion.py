@@ -14,4 +14,5 @@ sol_val = int(eval_sol(IN_DATA[in_name + '.json'], out_data))
 name = 'final-' + in_name + '-' + str(sol_val) + '.json'
 
 print('==== Value : ', sol_val)
+out_data = convert_output(out_data)
 output_sol_force_overwrite(parent / name, out_data, as_path=True)

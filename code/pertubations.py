@@ -8,4 +8,5 @@ from reassign import *
 #     val_sol
 #     if output_sol_if_better(in_data['name'], val_sol)
 
-# def try_improve_sol
+def try_improve_sol(in_data, sol):
+    pass

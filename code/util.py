@@ -130,6 +130,20 @@ def output_sol_if_better(name, data):
     output_sol_force_overwrite(name, data)
     return True
 
+def convert_output(data):
+    sol = {
+        "productionCenters" : [
+            {"id" : s+1, "automation" : 1 if typ == t_auto else 0 }
+            for s, typ in enumerate(data['sites']) if typ == t_auto or typ == t_prod
+        ],
+        "distributionCenters" : [
+            {"id" : s+1, "parent" : data['parent'][s]+1 }
+            for s, typ in enumerate(data['sites']) if typ == t_distrib
+        ],
+        "clients" : [{"id" : i+1, "parent" : p+1} for i, p in enumerate(data["clients"])]
+    }
+    return sol
+
 # ========== Evaluation ==========
 
 def eval_sol(in_data, out_data):

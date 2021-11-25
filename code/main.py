@@ -19,11 +19,12 @@ def main():
     inputs_names = INPUT_NAMES
     read_all_inputs()
 
-    in_data = IN_DATA['KIRO-medium.json']
-    for sol in all_possible_soluce(in_data):
-        sol = reasign_best(in_data, sol)
-        output_sol_if_better(in_data['name'], sol)
-    exit(0)
+    # in_data = IN_DATA['KIRO-tiny.json']
+    # for sol in all_possible_soluce(in_data):
+    #     print(1 in sol['sites'] or 2 in sol['sites'])
+    #     sol = reasign_best(in_data, sol)
+    #     output_sol_if_better(in_data['name'], sol)
+    # exit(0)
     
 
     for name in inputs_names:
