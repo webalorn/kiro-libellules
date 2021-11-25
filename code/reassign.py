@@ -34,9 +34,11 @@ def get_clients_dists(in_data, sol):
     dists.sort()
     return dists, dist_client2site
 
-def assign_linear(clients, dist_client2site, capacities, demands, parent, out_sites):
+def assign_linear(clients, dist_client2site, capacities, demands, parent, out_sites, clients_order=None):
     total_cost = 0
-    for i_client in range(len(clients)):
+    if clients_order is None:
+        clients_order = range(len(clients))
+    for i_client in clients_order:
         if clients[i_client] == -1:
             all_costs = []
             for cost, s in dist_client2site[i_client]:
@@ -78,3 +80,31 @@ def reasign_clients_from_low(in_data, sol):
 
     sol['clients'] = clients
     return sol, total_cost
+
+
+def reasign_clients_random(in_data, sol):
+    sol = deepcopy(sol)
+    parent = sol['parent']
+    out_sites = sol['sites']
+    demands = [c[0] for c in in_data['clients']]
+
+    dists, dist_client2site = get_clients_dists(in_data, sol)
+
+    clients = [-1 for c in sol['clients']]
+    capacities = get_capacities(sol)
+    clients_order = list(range(len(clients)))
+    shuffle(clients_order)
+
+    total_cost = assign_linear(clients, dist_client2site, capacities, demands, parent, out_sites, clients_order=clients_order)
+
+    sol['clients'] = clients
+    return sol, total_cost
+
+def reasign_best(in_data, sol, max_random=10):
+    sol_min, cost_min = reasign_clients_from_low(in_data, sol)
+    for _ in range(max_random):
+        sol, cost = reasign_clients_random(in_data, sol)
+        if cost < cost_min:
+            print("Better sol random")
+            sol_min, cost_min = sol, cost
+    return sol_min

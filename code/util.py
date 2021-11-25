@@ -57,7 +57,7 @@ def get_capacities(sol):
 
 # ========== Input / Output ==========
 
-def preprocess_input(data):
+def preprocess_input(data, name):
     clients = data["clients"]
     for i in range(len(clients)):
         d = clients[i]["demand"]
@@ -75,6 +75,7 @@ def preprocess_input(data):
     }
     data["clients"] = clients
     data["sites"] = sites
+    data['name'] = name
 
     return data
 
@@ -82,7 +83,7 @@ def read_input(name):
     p = Path('../inputs') / name
     with open(str(p), 'r') as f:
         data = json.load(f)
-    return preprocess_input(data)
+    return preprocess_input(data, name)
 
 def read_all_inputs():
     for name in INPUT_NAMES:
@@ -106,7 +107,7 @@ def output_sol_if_better(name, data):
     """ Returns True if the solution is better than the last found solution in this program run,
         even solution already written in the JSON file is even better.
         Updates BEST_SOLS_DATA and BEST_SOLS """
-    sol_val = eval_sol(IN_DATA['name'], data)
+    sol_val = eval_sol(IN_DATA[name], data)
     if name in BEST_SOLS and is_better_sol(sol_val, BEST_SOLS[name]):
         return False
     BEST_SOLS[name] = sol_val
@@ -118,7 +119,7 @@ def output_sol_if_better(name, data):
     except:
         pass
     if cur_file_sol is not None:
-        old_val = eval_sol(IN_DATA['name'], cur_file_sol)
+        old_val = eval_sol(IN_DATA[name], cur_file_sol)
         if not is_better_sol(old_val, sol_val):
             return True
     print(f"----> Found solution for {name} of value {sol_val}")
