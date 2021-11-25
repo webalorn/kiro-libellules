@@ -14,7 +14,7 @@ BEST_SOLS_DATA = {}
 IN_DATA = {}
 INPUT_NAMES = [e.name for e in Path('../inputs').iterdir() if e.name.endswith('.json')]
 
-OUT_SUFFIX = '-out-1' # TODO : to have different solutions names
+OUT_SUFFIX = '-brutal-1' # TODO : to have different solutions names
 
 # ========== Constants ==========
 
@@ -39,6 +39,17 @@ t_auto = 2
 t_distrib = 3
 
 # ========== Compute vals on sols ==========
+
+def generate_empty_solution(in_data): #Initialise une solution vide
+    nb_sites = len(in_data['sites'])
+    nb_clients = len(in_data['clients'])
+    out = {}
+    out['sites'] = [0 for _ in range(nb_sites)]
+    out['parent'] = [-1 for _ in range(nb_sites)]
+    out['prods'] = set()
+    out['distribs'] = set()
+    out['clients'] = [-1 for _ in range(nb_clients)]
+    return out
 
 def get_capacities(sol):
     return [capacity_base+capacity_auto_bonus if s == t_auto else
