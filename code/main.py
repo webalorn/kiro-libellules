@@ -25,7 +25,8 @@ def generate_base_solution(in_data):
 
 def improve_sol(in_data, sol):
     # return data # TODO : use functions from modules
-    return try_improve_sol(in_data, sol)
+    # return try_improve_sol(in_data, sol)
+    return improve_sol_2(in_data,sol)
 
 def improve_sol_2(in_data, sol):
     sol = sous_probleme(in_data, 35, 45, -10, 0, sol)
@@ -34,7 +35,7 @@ def improve_sol_2(in_data, sol):
 
 def main():
     t1 = time.time()
-    inputs_names = ['KIRO-medium.json'] # If we want to tune only some solutions
+    inputs_names = ['KIRO-large.json'] # If we want to tune only some solutions
     # inputs_names = INPUT_NAMES
     read_all_inputs()
 

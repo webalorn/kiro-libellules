@@ -1,6 +1,5 @@
 from stupid import * 
 from util import *
-from math import abs
 
 capacity_base = 1250000
 capacity_auto_bonus = 1250000
@@ -50,6 +49,7 @@ def sous_probleme(in_data,x_debut,x_fin,y_debut,y_fin,sol):
         d,indice,q = distance_site[i]
         q_init = distance_site[site_prod][2] 
         if q+q_init > capacity_base:
+            assignation[site_prod] -= 1
             site_prod += 1
             q_init = distance_site[site_prod][2]
         else:
@@ -64,7 +64,7 @@ def sous_probleme(in_data,x_debut,x_fin,y_debut,y_fin,sol):
         indice = distance_site[i][1]
         if i <= site_prod:
             sites_typ[indice] = 1
-        elif sites_typ[indice] == 1 or sites_typ[indice] == 2:
+        elif sites_typ[indice] != 0:
             sites_typ[indice] = 3
             if nb_assign > assignation[site_prod]:
                 site_prod += 1
