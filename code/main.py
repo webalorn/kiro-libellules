@@ -28,8 +28,8 @@ def generate_base_solution(in_data):
 
 def improve_sol(in_data, sol):
     # return data # TODO : use functions from modules
-    # return try_improve_sol(in_data, sol)
-    return improve_sol_2(in_data,sol)
+    return try_improve_sol(in_data, sol)
+    # return improve_sol_2(in_data,sol)
 
 def improve_sol_2(in_data, sol):
     sol = sous_probleme(in_data, 35, 45, -10, 0, sol)
@@ -57,7 +57,7 @@ def main():
     for name in inputs_names:
         print(f"========== GENERATE {name} ==========")
         in_data = IN_DATA[name]
-        for _ in range(10): # TODO : number of iterations
+        for _ in range(1): # TODO : number of iterations
             sol_data = generate_base_solution(in_data)
             output_sol_if_better(name, sol_data)
         
