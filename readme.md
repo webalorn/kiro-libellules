@@ -30,4 +30,4 @@ Pour les petits cas, on peut essayer de résoudre / optimiser à la main !! [En 
 
 - Théophane Vallaeys (@webalorn)
 - Maena Quemener (@moquem)
-- ?
+- Victor Miquel (@Swire42)
