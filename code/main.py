@@ -1,6 +1,10 @@
 from util import *
 from solution_tiny import *
+<<<<<<< HEAD
+from affichage_sites import *
+=======
 from reassign import *
+>>>>>>> cc2281f4bddca404f89c37157e15d63f35432fb2
 import time
 from stupid import stupid
 from pertubations import *
@@ -23,6 +27,10 @@ def main():
     # inputs_names = INPUT_NAMES
     read_all_inputs()
 
+    #print(IN_DATA['KIRO-tiny.json'])
+    #print(generate_empty_solution(IN_DATA['KIRO-tiny.json']))
+    #print(all_possible_soluce(IN_DATA['KIRO-tiny.json']))
+    affichage(IN_DATA['KIRO-large.json'])
     # in_data = IN_DATA['KIRO-tiny.json']
     # for sol in all_possible_soluce(in_data):
     #     print(1 in sol['sites'] or 2 in sol['sites'])
