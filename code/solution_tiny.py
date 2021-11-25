@@ -1,3 +1,5 @@
+from util import *
+
 def perm(longueur,l_all,previous,valable):
     if len(previous) == longueur:
         if valable:
@@ -54,11 +56,23 @@ def assign_all_perm_parents(sites):
         l = assign_parents(prods,distrib,[-1]*len(sites),0,[])
         all_parents.append(l)
 
-    return l_all_perm,all_parents
+    return prods,distrib,l_all_perm,all_parents
 
-l1,l2 = assign_all_perm_parents([0,0,0,0])
+def all_possible_soluce(in_data):
+    all_soluce = []
+    p,d,l1,l2 = assign_all_perm_parents(in_data['sites'])
+    for i in range(len(l1)):
+        for x in l2[i]:
+            out = generate_empty_solution(in_data)
+            out['sites'] = l1[i]
+            out['parent'] = x
+            out['prods'] = p
+            out['distribs'] = d
+            all_soluce.append(out)
+    return all_soluce
 
 
 
-    
+
+
 
