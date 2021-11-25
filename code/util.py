@@ -14,7 +14,7 @@ BEST_SOLS_DATA = {}
 IN_DATA = {}
 INPUT_NAMES = [e.name for e in Path('../inputs').iterdir() if e.name.endswith('.json')]
 
-OUT_SUFFIX = '-brutal-1' # TODO : to have different solutions names
+OUT_SUFFIX = '-out-1' # TODO : to have different solutions names
 
 # ========== Constants ==========
 
@@ -46,8 +46,6 @@ def generate_empty_solution(in_data): #Initialise une solution vide
     out = {}
     out['sites'] = [0 for _ in range(nb_sites)]
     out['parent'] = [-1 for _ in range(nb_sites)]
-    out['prods'] = set()
-    out['distribs'] = set()
     out['clients'] = [-1 for _ in range(nb_clients)]
     return out
 
@@ -57,7 +55,7 @@ def get_capacities(sol):
 
 # ========== Input / Output ==========
 
-def preprocess_input(data):
+def preprocess_input(data, name):
     clients = data["clients"]
     for i in range(len(clients)):
         d = clients[i]["demand"]
@@ -75,6 +73,7 @@ def preprocess_input(data):
     }
     data["clients"] = clients
     data["sites"] = sites
+    data['name'] = name
 
     return data
 
@@ -82,7 +81,7 @@ def read_input(name):
     p = Path('../inputs') / name
     with open(str(p), 'r') as f:
         data = json.load(f)
-    return preprocess_input(data)
+    return preprocess_input(data, name)
 
 def read_all_inputs():
     for name in INPUT_NAMES:
@@ -91,14 +90,20 @@ def read_all_inputs():
 def _out_with_suffix(name):
     return name[:-5] + OUT_SUFFIX + name[-5:]
 
-def read_sol(name):
-    p = Path('../sols') / _out_with_suffix(name)
+def read_sol(name, as_path=False):
+    if as_path:
+        p = Path(name)
+    else:
+        p = Path('../sols') / _out_with_suffix(name)
     with open(str(p), 'r') as f:
         data = json.load(f)
     return data
 
-def output_sol_force_overwrite(name, data):
-    p = Path('../sols') / _out_with_suffix(name)
+def output_sol_force_overwrite(name, data, as_path=False):
+    if as_path:
+        p = Path(name)
+    else:
+        p = Path('../sols') / _out_with_suffix(name)
     with open(str(p), 'w') as f:
         json.dump(data, f)
 
@@ -106,7 +111,7 @@ def output_sol_if_better(name, data):
     """ Returns True if the solution is better than the last found solution in this program run,
         even solution already written in the JSON file is even better.
         Updates BEST_SOLS_DATA and BEST_SOLS """
-    sol_val = eval_sol(IN_DATA['name'], data)
+    sol_val = eval_sol(IN_DATA[name], data)
     if name in BEST_SOLS and is_better_sol(sol_val, BEST_SOLS[name]):
         return False
     BEST_SOLS[name] = sol_val
@@ -118,16 +123,36 @@ def output_sol_if_better(name, data):
     except:
         pass
     if cur_file_sol is not None:
-        old_val = eval_sol(IN_DATA['name'], cur_file_sol)
+        old_val = eval_sol(IN_DATA[name], cur_file_sol)
         if not is_better_sol(old_val, sol_val):
             return True
     print(f"----> Found solution for {name} of value {sol_val}")
     output_sol_force_overwrite(name, data)
     return True
 
+def convert_output(data):
+    sol = {
+        "productionCenters" : [
+            {"id" : s+1, "automation" : 1 if typ == t_auto else 0 }
+            for s, typ in enumerate(data['sites']) if typ == t_auto or typ == t_prod
+        ],
+        "distributionCenters" : [
+            {"id" : s+1, "parent" : data['parent'][s]+1 }
+            for s, typ in enumerate(data['sites']) if typ == t_distrib
+        ],
+        "clients" : [{"id" : i+1, "parent" : p+1} for i, p in enumerate(data["clients"])]
+    }
+    return sol
+
 # ========== Evaluation ==========
 
 def eval_sol(in_data, out_data):
+    val = eval_sol_sub(in_data, out_data)
+    if val is None:
+        raise Exception("Invalid solution !!!")
+    return val
+
+def eval_sol_sub(in_data, out_data):
     ret = 0
     # Building cost
     for t in out_data["sites"]:
