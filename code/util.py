@@ -51,7 +51,10 @@ def preprocess_input(data):
         x,y = sites[i]["coordinates"]
         sites[i] = (x,y)
 
-    data = dict()
+    data = {
+        'siteSiteDistances' : data['siteSiteDistances'],
+        'siteClientDistances' : data['siteClientDistances'],
+    }
     data["clients"] = clients
     data["sites"] = sites
 
