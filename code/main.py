@@ -6,6 +6,7 @@ import time
 from stupid import stupid, stupid2
 from pertubations import *
 from sous_probleme import *
+from echange_prod_distrib import *
 
 def tres_stupide(in_data):
     sol = generate_empty_solution(in_data)
@@ -33,8 +34,11 @@ def improve_sol(in_data, sol):
     # return improve_sol_2(in_data,sol)
 
 def improve_sol_2(in_data, sol):
-    sol = sous_probleme(in_data, 35, 45, -10, 0, sol)
+    sol = sous_probleme(in_data, 42, 55, -5, 15, sol)
     return sol
+
+def improve_sol_3(in_data,sol):
+    return echange_try(in_data,sol)
 # ========== Main loop ==========
 
 def main():
@@ -73,7 +77,7 @@ def main():
         print(f"========== IMPROVE {name} ==========")
         in_data = IN_DATA[name]
         for _ in range(100): # TODO : number of iterations
-            sol_data = improve_sol(in_data, BEST_SOLS_DATA[name])
+            sol_data = improve_sol_3(in_data, BEST_SOLS_DATA[name])
             output_sol_if_better(name, sol_data)
     
     
