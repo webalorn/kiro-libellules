@@ -9,7 +9,7 @@ def recup_fils(parent,p):
     return fils
 
 def echange_prod_fils(f,p,parent):
-    for i in range(parent):
+    for i in range(len(parent)):
         if parent[i] == p:
             parent[i] = f
     parent[p] = parent[f]
