@@ -36,7 +36,21 @@ capacity_auto_bonus = 225000
 # ========== Input / Output ==========
 
 def preprocess_input(data):
-    # TODO si nécessaire ??
+    clients = data["clients"]
+    for i in range(len(clients)):
+        d = clients[i]["demand"]
+        x,y = clients["coordinates"][0],clients["coordinates"][1]
+        clients[i] = (d,(x,y))
+
+    sites = data["sites"]
+    for i in range(len(sites)):
+        x,y = sites[i]["coordinates"][0],sites[i]["coordinates"][1]
+        sites[i] = (x,y)
+
+    data = dict()
+    data["clients"] = clients
+    data["sites"] = sites
+
     return data
 
 def read_input(name):
