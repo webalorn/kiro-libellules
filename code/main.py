@@ -20,13 +20,16 @@ def tres_stupide(in_data):
 
 def generate_base_solution(in_data):
     # return {'empty' : True} # TODO : use functions from modules
-    return stupid(in_data)
+    print("--- start stupid2")
+    data = stupid2(in_data)
+    print("--- end stupid2")
+    return data
     # return tres_stupide(in_data)
 
 def improve_sol(in_data, sol):
     # return data # TODO : use functions from modules
-    # return try_improve_sol(in_data, sol)
-    return improve_sol_2(in_data,sol)
+    return try_improve_sol(in_data, sol)
+    # return improve_sol_2(in_data,sol)
 
 def improve_sol_2(in_data, sol):
     sol = sous_probleme(in_data, 42, 47, 5, 15, sol)

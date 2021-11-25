@@ -25,6 +25,7 @@ def try_assign_distrib(in_data, sol, to_assign):
             new_sol['sites'][s] = t_distrib
             new_sol['parent'][s] = s_parent
             sol, val_sol = get_best_sol(in_data, sol, val_sol=val_sol, new_sol=new_sol)
+    return sol
         
 
 def try_change_typ(in_data, sol, s, s_new_typ):
@@ -45,7 +46,7 @@ def try_change_typ(in_data, sol, s, s_new_typ):
                     sites[s2] = t_vide
                     parent[s2] = -1
                 
-            try_assign_distrib(in_data, sol, to_reassign)
+            sol = try_assign_distrib(in_data, sol, to_reassign)
     elif s_new_typ == t_distrib:
         to_reassign = [s]
         sites[s] = t_vide
@@ -57,7 +58,29 @@ def try_change_typ(in_data, sol, s, s_new_typ):
                     to_reassign.append(s2)
                     sites[s2] = t_vide
     
-        try_assign_distrib(in_data, sol, to_reassign)
+        sol = try_assign_distrib(in_data, sol, to_reassign)
+    return sol
+
+def try_move(in_data, sol, s, d):
+    typ = sol['sites'][s]
+    sites = sol['sites']
+    parent = sol['parent']
+    clients = sol['clients']
+    sites[d] = sites[s]
+    sites[s] = t_vide
+
+    if typ != t_distrib:
+        for i in range(len(parent)):
+            if parent[i] == s:
+                parent[i] = d
+    for i in range(len(clients)):
+        if clients[i] == s:
+            clients[i] = d
+    
+    sol, _ = get_best_sol(in_data, sol)
+    return sol
+            
+
 
 def try_improve_sol(in_data, sol):
     siteSiteDistances = in_data['siteSiteDistances']
@@ -77,7 +100,20 @@ def try_improve_sol(in_data, sol):
     print("Try change states")
     for s, s_new_typ in out_sites_states:
         new_sol = deepcopy(sol)
-        if try_change_typ(in_data, new_sol, s, s_new_typ) is not False:
+        new_sol = try_change_typ(in_data, new_sol, s, s_new_typ)
+        if new_sol:
+            sol, val_sol = get_best_sol(in_data, sol, val_sol=val_sol, new_sol=new_sol)
+    
+    print("Try moves")
+    # Try moves
+    move_dests = []
+    for s in range(len(out_sites)):
+        for d in range(len(out_sites)):
+            move_dests.append((s, d))
+    for s, d in move_dests:
+        if sol['sites'][s] != t_vide and sol['sites'][d] == t_vide:
+            new_sol = deepcopy(sol)
+            new_sol = try_move(in_data, new_sol, s, d)
             sol, val_sol = get_best_sol(in_data, sol, val_sol=val_sol, new_sol=new_sol)
     
     return sol
