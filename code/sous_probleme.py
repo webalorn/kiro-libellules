@@ -14,7 +14,7 @@ def quantite_sites(in_data,sol):
     for i in range(len(clients)):
         pere = clients_pere[i]
         prod_init = parents[pere]
-        quantite[prod_init] += client[i][0]
+        quantite[prod_init] += clients[i][0]
 
     return quantite
 
@@ -22,7 +22,7 @@ def quantite_sites(in_data,sol):
 def sous_probleme(in_data,x_debut,x_fin,y_debut,y_fin,sol):
     quantite = quantite_sites(in_data,sol)
 
-    pere = sol['parents']
+    pere = sol['parent']
     sites_typ = sol['sites']
 
     site_zone = []
@@ -58,21 +58,21 @@ def sous_probleme(in_data,x_debut,x_fin,y_debut,y_fin,sol):
         assignation[site_prod] += 1
     
     nb_assign = 0
-    site_prod = 0
+    site_pere = 0
     for i in range(len(distance_site)):
-        indice_prod = distance_site[site_prod][1]
+        indice_prod = distance_site[site_pere][1]
         indice = distance_site[i][1]
         if i <= site_prod:
             sites_typ[indice] = 1
         elif sites_typ[indice] != 0:
             sites_typ[indice] = 3
-            if nb_assign > assignation[site_prod]:
-                site_prod += 1
+            if nb_assign > assignation[site_pere]:
+                site_pere += 1
                 nb_assign = 0
             pere[indice] = indice_prod
             nb_assign += 1
     
-    sol['parents'] = pere
+    sol['parent'] = pere
     sol['site'] = sites_typ
     return sol
 
