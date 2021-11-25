@@ -24,6 +24,7 @@ def sous_probleme(in_data,x_debut,x_fin,y_debut,y_fin,sol):
     quantite = quantite_sites(in_data,sol)
 
     pere = sol['parents']
+    sites_typ = sol['sites']
 
     site_zone = []
     sites = in_data['sites']
@@ -62,9 +63,9 @@ def sous_probleme(in_data,x_debut,x_fin,y_debut,y_fin,sol):
         indice_prod = distance_site[site_prod][1]
         indice = distance_site[i][1]
         if i <= site_prod:
-            sites[indice] = 1
-        elif sites[indice] == 1 or sites[indice] == 2:
-            sites[indice] = 3
+            sites_typ[indice] = 1
+        elif sites_typ[indice] == 1 or sites_typ[indice] == 2:
+            sites_typ[indice] = 3
             if nb_assign > assignation[site_prod]:
                 site_prod += 1
                 nb_assign = 0
@@ -72,6 +73,7 @@ def sous_probleme(in_data,x_debut,x_fin,y_debut,y_fin,sol):
             nb_assign += 1
     
     sol['parents'] = pere
+    sol['site'] = sites_typ
     return sol
 
 

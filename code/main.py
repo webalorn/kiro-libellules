@@ -5,6 +5,7 @@ from reassign import *
 import time
 from stupid import stupid
 from pertubations import *
+from sous_probleme import *
 
 # TODO : should import functions from modules
 
@@ -16,6 +17,9 @@ def improve_sol(in_data, sol):
     # return data # TODO : use functions from modules
     return try_improve_sol(in_data, sol)
 
+def improve_sol_2(in_data, sol):
+    sol = sous_probleme(in_data, 35, 45, -10, 0, sol)
+    return sol
 # ========== Main loop ==========
 
 def main():
