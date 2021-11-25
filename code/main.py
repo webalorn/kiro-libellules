@@ -3,14 +3,24 @@ from solution_tiny import *
 from affichage_sites import *
 from reassign import *
 import time
-from stupid import stupid
+from stupid import stupid, stupid2
 from pertubations import *
+
+def tres_stupide(in_data):
+    sol = generate_empty_solution(in_data)
+    sites = in_data['sites']
+    sol['sites'] = [randint(0, 3) for _ in range(len(sites))]
+    places = [s for s, sv in enumerate(sol['sites']) if sv == t_auto or sv == t_prod]
+    sol['parent'] = [choice(places) for _ in range(len(sites))]
+    reasign_best(in_data, sol, 30)
+    return sol
 
 # TODO : should import functions from modules
 
 def generate_base_solution(in_data):
     # return {'empty' : True} # TODO : use functions from modules
-    return stupid(in_data)
+    return stupid2(in_data)
+    # return tres_stupide(in_data)
 
 def improve_sol(in_data, sol):
     # return data # TODO : use functions from modules

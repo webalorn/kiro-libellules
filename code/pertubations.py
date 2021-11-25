@@ -33,7 +33,7 @@ def try_change_typ(in_data, sol, s, s_new_typ):
     parent = sol['parent']
     sites[s] = s_new_typ
 
-    if s_new_typ == typ:
+    if s_new_typ == typ and typ != t_distrib:
         return False
     
     if s_new_typ == t_vide:
@@ -56,7 +56,7 @@ def try_change_typ(in_data, sol, s, s_new_typ):
                 if sites[s2] == t_distrib and parent[s2] == s:
                     to_reassign.append(s2)
                     sites[s2] = t_vide
-
+    
         try_assign_distrib(in_data, sol, to_reassign)
 
 def try_improve_sol(in_data, sol):
