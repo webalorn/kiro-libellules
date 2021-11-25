@@ -19,7 +19,10 @@ def tres_stupide(in_data):
 
 def generate_base_solution(in_data):
     # return {'empty' : True} # TODO : use functions from modules
-    return stupid2(in_data)
+    print("--- start stupid2")
+    data = stupid2(in_data)
+    print("--- end stupid2")
+    return data
     # return tres_stupide(in_data)
 
 def improve_sol(in_data, sol):
@@ -30,7 +33,7 @@ def improve_sol(in_data, sol):
 
 def main():
     t1 = time.time()
-    inputs_names = ['KIRO-medium.json'] # If we want to tune only some solutions
+    inputs_names = ['KIRO-large.json'] # If we want to tune only some solutions
     # inputs_names = INPUT_NAMES
     read_all_inputs()
 
@@ -49,7 +52,7 @@ def main():
     for name in inputs_names:
         print(f"========== GENERATE {name} ==========")
         in_data = IN_DATA[name]
-        for _ in range(1): # TODO : number of iterations
+        for _ in range(10): # TODO : number of iterations
             sol_data = generate_base_solution(in_data)
             output_sol_if_better(name, sol_data)
         
