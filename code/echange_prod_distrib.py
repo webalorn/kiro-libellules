@@ -22,7 +22,7 @@ def echange_try(in_data,sol):
 
 
     n = random.randint(0,len(parent)-1)
-    while sites[n] != 1 or sites[n] != 2:
+    while sites[n] != 1 and sites[n] != 2:
         n = random.randint(0,len(parent)-1)
 
     fils = recup_fils(parent,n)
