@@ -60,20 +60,20 @@ def read_sol(name):
     p = Path('../sols') / _out_with_suffix(name)
     with open(str(p), 'r') as f:
         data = json.load(f)
-    data['prods'] = set([s for s, typ in enumerate(data['sites']) if typ == T_AUTO or type == T_PROD])
-    data['distribs'] = set([s for s, typ in enumerate(data['sites']) if typ == T_DISTRIB])
+    data['prods'] = set([s for s, typ in enumerate(data['sites']) if typ == t_auto or type == t_prod])
+    data['distribs'] = set([s for s, typ in enumerate(data['sites']) if typ == t_prod])
     return data
 
 def outout_final_sol(name, data):
     p = Path('../sols') / ('final-' + _out_with_suffix(name))
     f_data = {
         "productionCenters" : [
-            {"id" : s+1, "automaton" : 1 if typ == T_AUTO else 0 }
-            for s, typ in enumerate(data['sites']) if typ == T_AUTO or type == T_PROD
+            {"id" : s+1, "automaton" : 1 if typ == t_auto else 0 }
+            for s, typ in enumerate(data['sites']) if typ == t_auto or type == t_prod
         ],
         "distributionCenters" : [
             {"id" : s+1, "parent" : data['parent'][s]+1 }
-            for s, typ in enumerate(data['sites']) if typ == T_DISTRIB
+            for s, typ in enumerate(data['sites']) if typ == t_prod
         ],
         "clients" : [{"id" : i+1, "parent" : p+1} for i, p in enumerate(data["clients"])]
     }
