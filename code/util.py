@@ -38,10 +38,33 @@ def read_sol(name):
     p = Path('../sols') / _out_with_suffix(name)
     with open(str(p), 'r') as f:
         data = json.load(f)
+    data['prods'] = set([s for s, typ in enumerate(data['sites']) if typ == T_AUTO or type == T_PROD])
+    data['distribs'] = set([s for s, typ in enumerate(data['sites']) if typ == T_DISTRIB])
     return data
+
+def outout_final_sol(name, data):
+    p = Path('../sols') / ('final-' + _out_with_suffix(name))
+    f_data = {
+        "productionCenters" : [
+            {"id" : s+1, "automaton" : 1 if typ == T_AUTO else 0 }
+            for s, typ in enumerate(data['sites']) if typ == T_AUTO or type == T_PROD
+        ],
+        "distributionCenters" : [
+            {"id" : s+1, "parent" : data['parent'][s]+1 }
+            for s, typ in enumerate(data['sites']) if typ == T_DISTRIB
+        ],
+        "clients" : [{"id" : i+1, "parent" : p+1} for i, p in enumerate(data["clients"])]
+    }
+    
+
+    with open(str(p), 'w') as f:
+        json.dump(f_data, f)
 
 def output_sol_force_overwrite(name, data):
     p = Path('../sols') / _out_with_suffix(name)
+    data = {key : value for key, value in data.values()}
+    del data['prods']
+    del data['distribs']
     with open(str(p), 'w') as f:
         json.dump(data, f)
 
