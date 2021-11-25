@@ -26,8 +26,8 @@ cost_prod_prod = 18.0
 cost_prod_auto_bonus = 3.4
 cost_prod_distrib = 2.0
 
-cost_route_primary = 0.015
-cost_route_secondary = 3.63
+cost_route_primary = 0.0075
+cost_route_secondary = 0.11
 
 cost_capacity_exceed = 1000.0
 capacity_base = 750000
@@ -84,33 +84,10 @@ def read_sol(name):
     p = Path('../sols') / _out_with_suffix(name)
     with open(str(p), 'r') as f:
         data = json.load(f)
-    data['prods'] = set([s for s, typ in enumerate(data['sites']) if typ == t_auto or type == t_prod])
-    data['distribs'] = set([s for s, typ in enumerate(data['sites']) if typ == t_prod])
     return data
-
-def outout_final_sol(name, data):
-    p = Path('../sols') / ('final-' + _out_with_suffix(name))
-    f_data = {
-        "productionCenters" : [
-            {"id" : s+1, "automaton" : 1 if typ == t_auto else 0 }
-            for s, typ in enumerate(data['sites']) if typ == t_auto or type == t_prod
-        ],
-        "distributionCenters" : [
-            {"id" : s+1, "parent" : data['parent'][s]+1 }
-            for s, typ in enumerate(data['sites']) if typ == t_prod
-        ],
-        "clients" : [{"id" : i+1, "parent" : p+1} for i, p in enumerate(data["clients"])]
-    }
-    
-
-    with open(str(p), 'w') as f:
-        json.dump(f_data, f)
 
 def output_sol_force_overwrite(name, data):
     p = Path('../sols') / _out_with_suffix(name)
-    data = {key : value for key, value in data.values()}
-    del data['prods']
-    del data['distribs']
     with open(str(p), 'w') as f:
         json.dump(data, f)
 
@@ -139,14 +116,49 @@ def output_sol_if_better(name, data):
 
 # ========== Evaluation ==========
 
-# def total_cost(data):
-#     ret = 0
-#     # Building cost
-#     for s in data["productionCenters"]:
-        
+def eval_sol(in_data, out_data):
+    ret = 0
+    # Building cost
+    for t in out_data["sites"]:
+        if t == t_prod:
+            ret += cost_build_prod
+        elif t == t_auto:
+            ret += cost_build_prod + cost_automation
+        elif t == t_distrib:
+            ret += cost_build_distrib
 
-def eval_sol(data):
-    return 0
+    # Capacity cost
+    capacities = [capacity_base+capacity_auto_bonus if t == t_auto else capacity_base for t in out_data["sites"]]
+    for k, center in enumerate(out_data["clients"]):
+        demand = in_data["clients"][k][0]
+        source = center
+
+        if out_data["sites"][center] == t_distrib:
+            source = out_data["parent"][center]
+
+            # Production cost
+            ret += cost_prod_distrib * demand # relay
+
+            # Routing cost
+            ret += demand * cost_route_primary * in_data["siteSiteDistances"][source][center]
+            ret += demand * cost_route_secondary * in_data["siteClientDistances"][center][k]
+        else:
+            # Routing cost
+            ret += demand * cost_route_secondary * in_data["siteClientDistances"][source][k]
+
+        capacities[source] -= demand # capacity cost ?
+
+        # Production cost
+        ret += cost_prod_prod * demand
+        if out_data["sites"][source] == t_auto:
+            ret -= cost_prod_auto_bonus * demand
+
+    # Capacity cost
+    for c in capacities:
+        if c<0:
+            ret += -c * cost_capacity_exceed
+
+    return ret
 
 def is_better_sol(old_sol_value, new_sol_value):
     return new_sol_value < old_sol_value # TODO : Replace by < if the best value is the lower one
