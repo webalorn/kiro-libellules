@@ -20,7 +20,7 @@ def main():
 
     #print(IN_DATA['KIRO-tiny.json'])
     #print(generate_empty_solution(IN_DATA['KIRO-tiny.json']))
-    print(all_possible_soluce(IN_DATA['KIRO-tiny.json']))
+    #print(all_possible_soluce(IN_DATA['KIRO-tiny.json']))
 
     for name in inputs_names:
         print(f"========== GENERATE {name} ==========")
