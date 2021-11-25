@@ -1,5 +1,7 @@
 from util import *
+from solution_tiny import *
 import time
+
 # TODO : should import functions from modules
 
 def generate_base_solution(in_data):
@@ -18,6 +20,7 @@ def main():
 
     #print(IN_DATA['KIRO-tiny.json'])
     #print(generate_empty_solution(IN_DATA['KIRO-tiny.json']))
+    print(all_possible_soluce(IN_DATA['KIRO-tiny.json']))
 
     for name in inputs_names:
         print(f"========== GENERATE {name} ==========")

@@ -147,6 +147,8 @@ def eval_sol(in_data, out_data):
 
         if out_data["sites"][center] == t_distrib:
             source = out_data["parent"][center]
+            if out_data["sites"][source] not in [t_prod,t_auto]: # check prod
+                return None
 
             # Production cost
             ret += cost_prod_distrib * demand # relay
@@ -154,9 +156,12 @@ def eval_sol(in_data, out_data):
             # Routing cost
             ret += demand * cost_route_primary * in_data["siteSiteDistances"][source][center]
             ret += demand * cost_route_secondary * in_data["siteClientDistances"][center][k]
-        else:
+        elif out_data["sites"][center] != t_vide:
             # Routing cost
             ret += demand * cost_route_secondary * in_data["siteClientDistances"][source][k]
+        else:
+            return None
+
 
         capacities[source] -= demand # capacity cost ?
 
