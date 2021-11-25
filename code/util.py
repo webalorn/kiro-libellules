@@ -123,27 +123,27 @@ def eval_sol(in_data, out_data):
     # Capacity cost
     capacities = [capacity_base+capacity_auto_bonus if t == t_auto else capacity_base for t in out_data["sites"]]
     for k, center in enumerate(out_data["clients"]):
-        demand = out_data["clients"][k][0]
+        demand = in_data["clients"][k][0]
         source = center
 
-        if data["sites"][center] == t_distrib:
-            source = parent[center]
+        if out_data["sites"][center] == t_distrib:
+            source = out_data["parent"][center]
 
             # Production cost
             ret += cost_prod_distrib * demand # relay
 
             # Routing cost
-            ret += cost_route_primary * in_data["siteSiteDistances"][source][center]
-            ret += cost_route_secondary * in_data["siteClientDistances"][center][k]
+            ret += demand * cost_route_primary * in_data["siteSiteDistances"][source][center]
+            ret += demand * cost_route_secondary * in_data["siteClientDistances"][center][k]
         else:
             # Routing cost
-            ret += cost_route_secondary * in_data["siteClientDistances"][source][k]
+            ret += demand * cost_route_secondary * in_data["siteClientDistances"][source][k]
 
         capacities[source] -= demand # capacity cost ?
 
         # Production cost
         ret += cost_prod_prod * demand
-        if data["sites"][source] == t_auto:
+        if out_data["sites"][source] == t_auto:
             ret -= cost_prod_auto_bonus * demand
 
     # Capacity cost
