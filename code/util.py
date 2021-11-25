@@ -39,15 +39,18 @@ def preprocess_input(data):
     clients = data["clients"]
     for i in range(len(clients)):
         d = clients[i]["demand"]
-        x,y = clients["coordinates"][0],clients["coordinates"][1]
+        x,y = clients[i]["coordinates"]
         clients[i] = (d,(x,y))
 
     sites = data["sites"]
     for i in range(len(sites)):
-        x,y = sites[i]["coordinates"][0],sites[i]["coordinates"][1]
+        x,y = sites[i]["coordinates"]
         sites[i] = (x,y)
 
-    data = dict()
+    data = {
+        'siteSiteDistances' : data['siteSiteDistances'],
+        'siteClientDistances' : data['siteClientDistances'],
+    }
     data["clients"] = clients
     data["sites"] = sites
 
